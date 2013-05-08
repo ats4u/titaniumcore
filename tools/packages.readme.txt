@@ -1,0 +1,194 @@
+
+
+    Simple Package Managing Library packages.js
+
+                                                           Titaniumcore Project
+================================================================================
+Atsushi Oka [ http://oka.nu/ ]                                        Jan 3,2009
+
+
+This is a simple library which manages package feauture.
+
+--- INTRODUCTION ---
+====================================================================================
+
+./packages.js has four main functions to maanage package.
+
+
+--- USAGE ---
+====================================================================================
+
+THE PURPOSE 1. Managing Script File Dependency
+    Since JavaScript has no explicit compiler, it is difficult to manage
+    dependency between script files in a project. Especially, when the project
+    becomes larger, tracing dependency becomes a very frustrating job.  The
+    goal of "packages.js" is conveying a solution for this problem. 
+    
+    This script contains two functions __unit(identifier) and
+    __uses(identifier).  Function __unit(identifier) declares an identifier to
+    tell the system that the script file is already loaded. Function
+    __uses(identifier) declares that the script file requires specific script
+    file.
+
+    When a requiring file has not loaded yet, it throws an exception as
+    common compilers do.
+    
+    Not only throwing exception is the benefit.  Putting these functions at
+    the head of a script file makes it easier to know which script files the
+    script file relies on.  
+
+
+        ---------------------
+        // FILE "fileA.js"
+            .
+            .
+        __unit( "fileA.js" );
+            .
+            .
+        ---------------------
+
+
+
+        ---------------------
+        // FILE "fileB.js"
+            .
+            .
+        __unit( "fileB.js" );
+        __uses( "fileA.js" );
+            .
+            .
+        ---------------------
+
+
+
+        ---------------------
+        // FILE "fileC.js"
+            .
+            .
+        __unit( "fileC.js" );
+        __uses( "fileB.js" );
+            .
+            .
+        ---------------------
+
+
+        ---------------------
+        // FILE "fileD.js"
+            .
+            .
+        __unit( "fileD.js" );
+        __uses( "fileX.js" ); // unknown script file. throws Exception.
+            .
+            .
+        ---------------------
+
+
+Reference
+    function __unit( identifier )
+        Declares an identifier which represents the current script file. The
+        identifier can be any arbitrary string. The identifier does not
+        necessarily have to be its filename itself. Though it is good mannar to
+        make it identical to the file name.
+
+
+    function __uses( identifier )
+        Declares that the script file depends on another specific script
+        file.  If the specified identifier is not defined yet, it will throw
+        an exception.
+
+
+THE PURPOSE 2. Importing and Exporting
+
+    You usually build a program with a number of classes or functions. And
+    it is often with the classes, functions that other people have written.
+    As the program grows larger and larger, the risk of class/function name
+    confliction also grows. And such name confliction causes delicate bugs
+    that are very difficult to distinguish.
+
+    One of solution is that put these classes, functions into a specific object
+    in this way :
+
+        - Defining Class
+            function YourClass(){
+            }
+            YourClass.prototype.hello = function(){
+                trace("hello");
+            };
+            if ( this.foo == null ) {
+                this.foo= {};
+            }
+            if ( this.foo.bar == null ) {
+                this.foo.bar= {};
+            }
+            if ( this.foo.bar.buz == null ) {
+                this.foo.bar.buz= {};
+            }
+            this.foo.bar.buz.YourClass = YourClass;
+
+
+        - Using Class
+            var YourClass = this.foo.bar.buz.YourClass;
+            var a = new YourClass();
+            var a.hello();
+
+    This code is very complecated. And since it will be ignored that the one of
+    the object "this","foo","bar","buz" is null and failed to load the class.
+    It will not work without any error or warnings.  This is also a problem
+    that is difficult to distinguish.
+
+
+    The library package.js gives some functions to manage this problem simply.
+
+        - Defining Class
+            function YourClass() {
+            }
+            YourClass.prototype.hello = function(){
+                trace("hello");
+            };
+            __export( this, "foo.bar.YourClass" , YourClass );
+
+
+        - Using Class
+            var YourClass = __import( this, "foo.bar.YourClass" );
+            var a = new YourClass();
+            a.hello();
+
+    __export() method sets the specific class to the specified object path.
+    The method also checks if the object path is already used by another
+    class and report error. If any confliction is detected, the method will
+    throw an exception.
+
+    __import() method retrieve a class from the specified object path.
+    The method also checks if the object path exists. If the object path is
+    not defined, the method will throw an exception.
+    
+
+Reference
+
+    function __export( scope, class_path, class_object );
+        Exports an object to a specific object path.
+
+        Parameters
+            scope : specifies the root object which the method starts to
+            search from.
+            
+            class_path : specifies an object path.  period "." is used as
+            separator.
+
+            class_object : specifies an object to export.
+
+
+    function __import( scope, class_path );
+        Parameters
+            scope : specifies the root object which the method starts to
+            search from.
+            
+            class_path : specifies an object path.  period "." is used as
+            separator.
+
+--- Author ---
+====================================================================================
+
+Copyright(c) 2009 Atsushi Oka [ http://oka.nu/ ]
+This script file is distributed under the LGPL
+

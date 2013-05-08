@@ -1,0 +1,203 @@
+<html>
+    <head>
+	<title>JavaScript Block Cipher Implementation - Titaniumcore Project</title>
+	<script src="../tools/packages.js"></script>
+	<script src="../tools/binary.js"></script>
+	<script src="Cipher.js"></script>
+	<style>
+	    h1 {
+		font-size:20px;
+	    }
+	    h2 {
+		font-size:18px;
+	    }
+	    hr { 
+		border: 0px none white;
+		color:white;
+		border-bottom : 1px dashed silver; 
+		background-color : white;
+		margin:20px;
+	    }
+	    blockquote {
+		border : 0px;
+		margin : 0px;
+		margin-left : 50px;
+	    }
+	</style>
+	<script>
+	    var Cipher = __import( this, "titaniumcore.crypto.Cipher" );
+
+	    var defaultText =
+		"IlN0YWtrZWxzIFNreWdnZSEiIHNhZ2RlIFByaW5kc2Vzc2VuLCAiaGFuIGVyIG1lZ2V0IHVseWtrZWxpZzsgZGV0IGVyIGVuIHNhbmQgVmVsZ2plcm5pbmcgYXQgZnJp"+
+		"ZSBoYW0gZnJhIGRlbiBTbXVsZSBMaXYgaGFuIGhhciwgb2cgbmFhciBqZWcgcmlndGlnIHTDpm5rZXIgb3ZlciBkZXQsIHNhYSB0cm9lciBqZWcgZGV0IGJsaXZlciBu"+
+		"w7hkdmVuZGlndCBhdCBkZXQgYmxpdmVyIGdqb3J0IGFmIG1lZCBoYW0gaSBhbCBTdGlsaGVkISIgCgrjgIDvvKvlkJvjga/oh6rliIbjga7lvbHjgpLopovjgabjgYTj"+
+		"gZ/jgIHjgajnlLPjgZfjgb7jgZfjgZ/jgILjgZ3jgZfjgabjgZ3jgozjga/pmL/niYfjga7jgZTjgajjgY3jgoLjga7jgaDjgIHjgajnlLPjgZfjgb7jgZfjgZ/jgILj"+
+		"gIDjgYLjgarjgZ/jgavjgoLjgZ3jgozjgYznqoHpo5vjgafjgYLjgorjgb7jgZfjgofjgYbjgojjgYbjgavjgIHjgZ3jgozjga/np4HjgavjgoLlrp/jgavnqoHpo5vj"+
+		"gafjgZfjgZ/jgILjgIDlpJzlhYnomavjgYznvo7jgZfjgY/lhYnjgovmtbfjgpLliY3jgavjgZfjgabjgIHvvKvlkJvjga/jgZ3jga7kuI3mgJ3orbDjgarorILjgo/j"+
+		"gozjgpLjgbzjgaHjgbzjgaHoqbHjgZfjgabjgY/jgozjgb7jgZfjgZ/jgIIKCtCT0LvQsNCy0L3Ri9C5INGB0LzRi9GB0LvigKYg0YTQuNC70YzQvNCwINGPINCy0LjQ"+
+		"ttGDINCyINC10LPQviDQvdGA0LDQstGB0YLQstC10L3QvdC+0Lkg0L/RgNC+0LHQu9C10LzQsNGC0LjQutC1LiDQn9GA0L7QvdC40LrQvdC+0LLQtdC90LjQtSDQsiDR"+
+		"gdC+0LrRgNC+0LLQtdC90L3Ri9C1INGC0LDQudC90Ysg0L/RgNC40YDQvtC00Ysg0LTQvtC70LbQvdC+INC90LDRhdC+0LTQuNGC0YzRgdGPINCyINC90LXRgNCw0LfR"+
+		"gNGL0LLQvdC+0Lkg0YHQstGP0LfQuCDRgSDQv9GA0L7Qs9GA0LXRgdGB0L7QvCDQvdGA0LDQstGB0YLQstC10L3QvdGL0LwuINCh0LTQtdC70LDQsiDRiNCw0LMg0L3Q"+
+		"sCDQvdC+0LLRg9GOINGB0YLRg9C/0LXQvdGMINC/0L7Qt9C90LDQvdC40Y8sINC90LXQvtCx0YXQvtC00LjQvNC+INC00YDRg9Cz0YPRjiDQvdC+0LPRgyDQv9C+0YHR"+
+		"gtCw0LLQuNGC0Ywg0L3QsCDQvdC+0LLRg9GOINC90YDQsNCy0YHRgtCy0LXQvdC90YPRjiDRgdGC0YPQv9C10L3RjC4g0K8g0YXQvtGC0LXQuyDQtNC+0LrQsNC30LDR"+
+		"gtGMINGB0LLQvtC10Lkg0LrQsNGA0YLQuNC90L7QuSwg0YfRgtC+INC/0YDQvtCx0LvQtdC80LAg0L3RgNCw0LLRgdGC0LLQtdC90L3QvtC5INGB0YLQvtC50LrQvtGB"+
+		"0YLQuCwg0L3RgNCw0LLRgdGC0LLQtdC90L3QvtC5INGH0LjRgdGC0L7RgtGLINC/0YDQvtC90LjQt9GL0LLQsNC10YIg0LLRgdC1INC90LDRiNC1INGB0YPRidC10YHR"+
+		"gtCy0L7QstCw0L3QuNC1LCDQv9GA0L7Rj9Cy0LvRj9GP0YHRjCDQtNCw0LbQtSDQsiDRgtCw0LrQuNGFINC+0LHQu9Cw0YHRgtGP0YUsINC60L7RgtC+0YDRi9C1INC9"+
+		"0LAg0L/QtdGA0LLRi9C5INCy0LfQs9C70Y/QtCDQvdC1INGB0LLRj9C30LDQvdGLINGBINC80L7RgNCw0LvRjNGOLCDQvdCw0L/RgNC40LzQtdGALCDRgtCw0LrQuNGF"+
+		"INC60LDQuiDQv9GA0L7QvdC40LrQvdC+0LLQtdC90LjQtSDQsiDQutC+0YHQvNC+0YEsINC40LfRg9GH0LXQvdC40LUg0L7QsdGK0LXQutGC0LjQstC90L7Qs9C+INC8"+
+		"0LjRgNCwINC4INGC0LDQuiDQtNCw0LvQtdC1LgkKCuC4oeC4tuC4h+C5gOC4q+C4ouC4teC4ouC4muC4leC4teC4meC4geC4uQo=";
+
+	    defaultText = utf82str( base64_decode(defaultText) );
+
+	    function stringBreak(s,col) {
+		var result = "";
+		for ( var i=0; i<s.length; i++ ) {
+		    result += s.charAt( i );
+		    if ( ( (i+1) % col == 0 ) && ( 0<i )) {
+			result += "\n";
+		    }
+		}
+		return result;
+	    }
+	    function pack(s) {
+		var result = "";
+		for ( var i=0; i<s.length; i++ ) {
+		    var c = s.charAt( i );
+		    if ( c==" " || c=="\t" || c=="\r" || c=="\n" ) {
+		    } else {
+			result += c;
+		    }
+		}
+		return result;
+	    }
+
+	    function createCipher( directionName ) {
+		var algorithm = Cipher[ document.form1.cipherAlgorithm.value ];
+		var mode  = Cipher[ document.form1.cipherMode.value ];
+		var padding  = Cipher[ document.form1.cipherPadding.value ];
+		var direction = Cipher[ directionName ];
+		var cipher = Cipher.create( algorithm, direction, mode, padding );
+		return cipher;
+	    }
+	    function encrypt() {
+		var cipher = createCipher( "ENCRYPT" );
+		var text = str2utf8( document.form1.input.value );
+		var key = base64_decode( pack( document.form1.key64.value ) );
+		text = cipher.execute( key.concat(), text.concat() );
+		var result = stringBreak( base64_encode( text ), 48 );
+		document.form1.output.value = result;
+
+	    }
+	    function decrypt() {
+		var cipher = createCipher( "DECRYPT" );
+		var text = base64_decode( pack( document.form1.input.value ) );
+		var key = base64_decode( pack( document.form1.key64.value ) );
+		text = cipher.execute( key.concat(), text.concat() );
+		var result = utf82str( text );
+		document.form1.output.value = result;
+	    }
+	    function generateKey() {
+		var key = new Array(16);
+		for ( var i=0; i<key.length; i++ ){
+		    key[i] = Math.floor( Math.random() * 256 );
+		}
+		document.form1.key64.value = base64_encode( key );
+	    }
+	    function outputToInput() {
+		document.form1.input.value = document.form1.output.value;
+		document.form1.output.value = "";
+	    }
+	    function resetText() {
+		document.form1.input.value = defaultText;
+		document.form1.output.value = "";
+	    }
+	    function initialize() {
+		if (document.form1.input.value == "" ) {
+		    generateKey();
+		}
+		if (document.form1.input.value == "" ) {
+		    resetText();
+		}
+	    }
+	</script>
+    </head>
+    <body onLoad="initialize()">
+	<h1>A JavaScript Block Cipher Algorithms Implementation - DEMO</h1>
+	<ul>
+	    <li>Supports Serpent, Twofish and Rijndael</li>
+	    <li>Supports UTF-8 character encoding</li>
+	</ul>
+	<form name="form1" >
+	    <b>Instruction</b>
+	    <blockquote>
+	    Input text to the upper textarea and click "Encrypt" button.
+	    You will get encrypted text on the lower textarea.
+	    <br>
+	    Copy and Paste the encrypted text to the upper textarea.  Or you
+	    can also use "Swap" button to do it for your convenience.
+	    <br>
+	    Click the "Decrypt" button to decrypt. The result will appear to
+	    the lower textarea.
+
+	    </blockquote>
+	    <b>Input</b><br>
+	    <blockquote>
+	    <textarea name="input" style="width:500px; height:100px"></textarea>
+	    <br>
+	    <table width=500><tr>
+	    <td style="line-height:1.5em;">
+	    <b>Algorithm</b> :
+	    <select name="cipherAlgorithm" >
+		<option value="SERPENT">Serpent</option>
+		<option value="TWOFISH" Selected>Twofish</option>
+		<option value="RIJNDAEL">Rijndael</option>
+	    </select>
+	    <br>
+	    <b>Block Cipher Mode</b> :
+	    <select name="cipherMode">
+		<option value="ECB">ECB</option>
+		<option value="CBC" selected>CBC</option>
+		<!-- <option value="CFB">CFB</option> -->
+		<!-- <option value="OFB">OFB</option> -->
+		<!-- <option value="CTR">CTR</option> -->
+	    </select>
+	    <br>
+	    <b>Padding</b> :
+	    <select name="cipherPadding">
+		<option value="RFC1321">RFC1321</option>
+		<option value="ANSIX923">ANSIX923</option>
+		<option value="ISO10126">ISO10126</option>
+		<option value="PKCS7" selected>PKCS7</option>
+		<option value="NO_PADDING">NO PADDING</option>
+	    </select>
+
+	    </td>
+	    <td valign="middle" align="right">
+		<input type="button" name="buttonEncrypt" value="Encrypt" onClick="encrypt();">
+		<input type="button" name="copyToInput" value="Swap" onClick="outputToInput();">
+		<input type="button" name="buttonDecrypt" value="Decrypt" onClick="decrypt();">
+		<input type="button" name="resetAll" value="Reset" onClick="resetText();">
+	    </td>
+	    </tr>
+	    </table>
+
+	    </blockquote>
+	    <hr>
+	    <b>Key</b> :
+	    <blockquote>
+	    <input type="text" name="key64" value="" size=40>
+	    <input type="button" name="keygen" value="Generate" onClick="generateKey();">
+	    </blockquote>
+	    <hr>
+	    <b>Output</b><br>
+	    <blockquote>
+	    <textarea name="output" style="width:500px; height:100px"></textarea>
+	    </blockquote>
+	</form>
+	    <hr>
+	<b> Contacts </b><br>
+	<blockquote>
+	Ats Oka [ <a href="http://oka.nu">http://oka.nu</a> ]
+	</blockquote>
+    </body>
+</html>

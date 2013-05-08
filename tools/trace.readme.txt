@@ -1,0 +1,44 @@
+
+
+    ./trace.js
+
+                                                           Titaniumcore Project
+================================================================================
+Atsushi Oka [ http://oka.nu/ ]                                       Jan 11,2009
+
+Introduction
+    ./trace.js is designed to convey compatibility to ActionScript on Flash.
+    ActionScript has trace() function which is very useful. Web browser does
+    not have it though.
+
+    Example)
+        <html>
+        <head>
+            <script src="hello.js"></script>
+        </head>
+        <body>
+            <script>
+                // test the Hello here.
+                trace( "Hello=" + Hello );
+                var hello = new Hello();
+                trace( hello );
+                trace( "The result is " + hello.world() );
+                trace( "Finished!" );
+            </script>
+        </body>
+        </html>
+
+    This HTML generates a simple test report of Hello class.
+
+Restriction
+    Function trace() must be called in <body></body> tags.
+    If you don't like this feauture, use "trace.async.js" which process
+    messages asynchronously.  Though, there are certain situations that
+    "trace.js" is more useful than "trace.async.js".
+
+
+--- Author ---
+====================================================================================
+Copyright(c) 2009 Atsushi Oka [ http://oka.nu/ ]
+This script file is distributed under the LGPL
+

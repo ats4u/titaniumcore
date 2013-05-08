@@ -1,0 +1,62 @@
+
+
+    interface PaddingScheme
+
+                                                           Titaniumcore Project
+================================================================================
+Atsushi Oka [ http://oka.nu/ ]                                      Jan 15,2009
+
+
+This document describes about PaddingScheme interface.
+
+Currently there are two classes implement this interface.
+See ./BitPadding.readme.txt
+    ./SOAEP.readme.txt
+
+For further information of the interface files, see ./readme.interface.txt.
+
+
+    /**
+     * PaddingScheme - An interface for SOAEP and BitPadding 
+     */
+    interface PaddingScheme {
+        /**
+         * encode a binary string in a byte array.
+         *
+         * "length" specifies the length the encoded binary string is supposed
+         * to be.  If "length" is null, it will automatically calculate
+         * the nearest sufficient length for the length of input data.
+         */
+        byte[] encode( byte[] input, int length );
+
+
+        /**
+         * decode a binary string in a byte array.
+         */
+        byte[] decode( byte[] input );
+
+
+        /**
+         * maxsize() method returns the maximum length of content inside the
+         * specified length of a container.
+         *
+         * |--------------------- length ----------------------------------|
+         * |AC 94 98 3D E8 CD A9 59 AC 94 00 00 00 00 00 00 00 00 00 00 00 |
+         * |---      DATA LENGTH    ----|-------     PADDING          -----|
+         * 
+         * The padding has a limitation for the least size. 
+         * This method returns length - (the least size of padding).
+         */
+        int maxsize( int length );
+
+
+        /**
+         * blocksize() method returns a number of padding-scheme's block size.
+         * the length of encoded data should be a multiply of this number.
+         */
+        int blocksize();
+    }
+
+================================================================================
+
+// vim:expandtab:

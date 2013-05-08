@@ -1,0 +1,63 @@
+
+
+    RSA Encryption/Decryption Scheme
+
+                                                           Titaniumcore Project
+================================================================================
+Atsushi Oka [ http://oka.nu/ ]                                        Jan 8,2009
+
+
+RSAMessageFormatSOAEP class and RSAMessageFormatBitPadding class define several
+methods which encrypt/decrypt messages with Titaniumcore RSA Encryption Scheme. 
+
+RSAMessageFormatSOAEP encrypts/decrypts with SOAEP.  RSAMessageFormatBitPadding
+works as well as RSAMessageFormatSOAEP except it uses Bit-Padding-Scheme instead of
+SOAEP.
+
+They inherit main functions from RSAMessageFormat class.
+See ./RSAMessageFormat.readme.txt
+
+
+Link
+    <script src="./tools/packages.js"></script>
+    <script src="./cipher/SecureRandom.js" ></script>
+    <script src="./cipher/BigInteger.init1.js" ></script>
+    <script src="./cipher/BigInteger.init2.js" ></script>
+    <script src="./cipher/RSA.init1.js" ></script>
+    <script src="./cipher/RSA.init2.js" ></script>
+    <script src="./cipher/SOAEP.js" ></script>
+    <script src="./cipher/BitPadding.js" ></script>
+    <script src="./tools/binary.js" ></script>
+    <script src="./cipher/RSAMessageFormat.js"></script>
+    <script src="./cipher/RSAMessageFormatSOAEP.js"></script>
+    <script src="./cipher/RSAMessageFormatBitPadding.js"></script>
+
+Import
+    var RSAMessageFormatSOAEP = __import( this, "titaniumcore.crypto.RSAMessageFormatSOAEP" );
+    var RSAMessageFormatBitPadding = __import( this,"titaniumcore.crypto.RSAMessageFormatBitPadding" );
+
+
+Constructor
+    This class is a static class. Do not instantiate this class.
+
+
+Example
+    // Set the default encryption scheme for all RSA objects to SOAEP.
+    RSA.installMessageFormat( RSAMessageFormatSOAEP );
+
+    // Set the default encryption scheme for all RSA objects to BitPadding.
+    RSA.installMessageFormat( RSAMessageFormatBitPadding );
+
+    // Create a new RSA object.
+    var rsa = new RSA();
+
+    // Set its encryption scheme to SOAEP.
+    rsa.messageFormat = RSAMessageFormatSOAEP;
+
+    // Set its encryption scheme to BitPadding.
+    rsa.messageFormat = RSAMessageFormatBitPadding;
+
+
+================================================================================
+
+// vim:ts=8:expandtab:

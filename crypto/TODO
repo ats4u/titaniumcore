@@ -1,0 +1,25 @@
+
+-- RSAScheme is not written.
+
+./RSAMessageFormat.readme.txt is not written
+./RSAKeyFormat.readme.txt is not written
+./RSA.readme.txt
+
+
+
+---------------------
+
+- OK -It is necessary to describe how it can be imported.
+    - package name is also necessary.
+
+- Much more appreciation
+
+- OK - Make sure every readme have a copyright note in its foot note.
+- OK - readme should be TAB:8 EXPANDTAB
+
+- OK - write SHA.readme.txt. It hasn't done yet.
+
+- OK - Link should be relative path. NOT URL
+
+The document for SecureRandom has not written yet
+

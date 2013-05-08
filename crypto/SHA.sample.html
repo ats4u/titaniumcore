@@ -1,0 +1,199 @@
+<html>
+    <head>
+    <script src="../tools/packages.js"></script>
+    <script src="../tools/binary.js"></script>
+    <script src="jsSHA.js"></script>
+    <script src="SHA.js"></script>
+    <script>
+    </script>
+    <style>
+	h1 {
+	font-size:20px;
+	}
+	h2 {
+	font-size:18px;
+	}
+	hr { 
+	border: 0px none white;
+	color:white;
+	border-bottom : 1px dashed silver; 
+	background-color : white;
+	margin:20px;
+	}
+	blockquote {
+	border : 0px;
+	margin : 0px;
+	margin-left : 50px;
+	}
+    </style>
+    <script>
+	var SHA = __import( this,"titaniumcore.crypto.SHA" );
+	var defaultTextBase64 =
+	"IlN0YWtrZWxzIFNreWdnZSEiIHNhZ2RlIFByaW5kc2Vzc2VuLCAiaGFuIGVyIG1lZ2V0IHVseWtrZWxpZzsgZGV0IGVyIGVuIHNhbmQgVmVsZ2plcm5pbmcgYXQgZnJp"+
+	"ZSBoYW0gZnJhIGRlbiBTbXVsZSBMaXYgaGFuIGhhciwgb2cgbmFhciBqZWcgcmlndGlnIHTDpm5rZXIgb3ZlciBkZXQsIHNhYSB0cm9lciBqZWcgZGV0IGJsaXZlciBu"+
+	"w7hkdmVuZGlndCBhdCBkZXQgYmxpdmVyIGdqb3J0IGFmIG1lZCBoYW0gaSBhbCBTdGlsaGVkISIgCgrjgIDvvKvlkJvjga/oh6rliIbjga7lvbHjgpLopovjgabjgYTj"+
+	"gZ/jgIHjgajnlLPjgZfjgb7jgZfjgZ/jgILjgZ3jgZfjgabjgZ3jgozjga/pmL/niYfjga7jgZTjgajjgY3jgoLjga7jgaDjgIHjgajnlLPjgZfjgb7jgZfjgZ/jgILj"+
+	"gIDjgYLjgarjgZ/jgavjgoLjgZ3jgozjgYznqoHpo5vjgafjgYLjgorjgb7jgZfjgofjgYbjgojjgYbjgavjgIHjgZ3jgozjga/np4HjgavjgoLlrp/jgavnqoHpo5vj"+
+	"gafjgZfjgZ/jgILjgIDlpJzlhYnomavjgYznvo7jgZfjgY/lhYnjgovmtbfjgpLliY3jgavjgZfjgabjgIHvvKvlkJvjga/jgZ3jga7kuI3mgJ3orbDjgarorILjgo/j"+
+	"gozjgpLjgbzjgaHjgbzjgaHoqbHjgZfjgabjgY/jgozjgb7jgZfjgZ/jgIIKCtCT0LvQsNCy0L3Ri9C5INGB0LzRi9GB0LvigKYg0YTQuNC70YzQvNCwINGPINCy0LjQ"+
+	"ttGDINCyINC10LPQviDQvdGA0LDQstGB0YLQstC10L3QvdC+0Lkg0L/RgNC+0LHQu9C10LzQsNGC0LjQutC1LiDQn9GA0L7QvdC40LrQvdC+0LLQtdC90LjQtSDQsiDR"+
+	"gdC+0LrRgNC+0LLQtdC90L3Ri9C1INGC0LDQudC90Ysg0L/RgNC40YDQvtC00Ysg0LTQvtC70LbQvdC+INC90LDRhdC+0LTQuNGC0YzRgdGPINCyINC90LXRgNCw0LfR"+
+	"gNGL0LLQvdC+0Lkg0YHQstGP0LfQuCDRgSDQv9GA0L7Qs9GA0LXRgdGB0L7QvCDQvdGA0LDQstGB0YLQstC10L3QvdGL0LwuINCh0LTQtdC70LDQsiDRiNCw0LMg0L3Q"+
+	"sCDQvdC+0LLRg9GOINGB0YLRg9C/0LXQvdGMINC/0L7Qt9C90LDQvdC40Y8sINC90LXQvtCx0YXQvtC00LjQvNC+INC00YDRg9Cz0YPRjiDQvdC+0LPRgyDQv9C+0YHR"+
+	"gtCw0LLQuNGC0Ywg0L3QsCDQvdC+0LLRg9GOINC90YDQsNCy0YHRgtCy0LXQvdC90YPRjiDRgdGC0YPQv9C10L3RjC4g0K8g0YXQvtGC0LXQuyDQtNC+0LrQsNC30LDR"+
+	"gtGMINGB0LLQvtC10Lkg0LrQsNGA0YLQuNC90L7QuSwg0YfRgtC+INC/0YDQvtCx0LvQtdC80LAg0L3RgNCw0LLRgdGC0LLQtdC90L3QvtC5INGB0YLQvtC50LrQvtGB"+
+	"0YLQuCwg0L3RgNCw0LLRgdGC0LLQtdC90L3QvtC5INGH0LjRgdGC0L7RgtGLINC/0YDQvtC90LjQt9GL0LLQsNC10YIg0LLRgdC1INC90LDRiNC1INGB0YPRidC10YHR"+
+	"gtCy0L7QstCw0L3QuNC1LCDQv9GA0L7Rj9Cy0LvRj9GP0YHRjCDQtNCw0LbQtSDQsiDRgtCw0LrQuNGFINC+0LHQu9Cw0YHRgtGP0YUsINC60L7RgtC+0YDRi9C1INC9"+
+	"0LAg0L/QtdGA0LLRi9C5INCy0LfQs9C70Y/QtCDQvdC1INGB0LLRj9C30LDQvdGLINGBINC80L7RgNCw0LvRjNGOLCDQvdCw0L/RgNC40LzQtdGALCDRgtCw0LrQuNGF"+
+	"INC60LDQuiDQv9GA0L7QvdC40LrQvdC+0LLQtdC90LjQtSDQsiDQutC+0YHQvNC+0YEsINC40LfRg9GH0LXQvdC40LUg0L7QsdGK0LXQutGC0LjQstC90L7Qs9C+INC8"+
+	"0LjRgNCwINC4INGC0LDQuiDQtNCw0LvQtdC1LgkKCuC4oeC4tuC4h+C5gOC4q+C4ouC4teC4ouC4muC4leC4teC4meC4geC4uQo=";
+
+	var defaultText = utf82str( base64_decode( defaultTextBase64 ) );
+
+	function stringBreak(s,col) {
+	    var result = "";
+	    for ( var i=0; i<s.length; i++ ) {
+		result += s.charAt( i );
+		if ( ( (i+1) % col == 0 ) && ( 0<i )) {
+		result += "\n";
+		}
+	    }
+	    return result;
+	}
+	function pack(s) {
+	    var result = "";
+	    for ( var i=0; i<s.length; i++ ) {
+		var c = s.charAt( i );
+		if ( c==" " || c=="\t" || c=="\r" || c=="\n" ) {
+		} else {
+		result += c;
+		}
+	    }
+	    return result;
+	}
+
+	function digest() {
+            var text;
+            if ( document.form1.encodeType.selectedIndex == 0 ) {
+                text = str2utf8( document.form1.input.value );
+            } else if ( document.form1.encodeType.selectedIndex == 1 ) {
+                text = base64_decode( pack( document.form1.input.value ) );
+            }
+
+            var type =document.form1.shaType.value;
+            text = SHA.create( type ).hash( text );
+
+            var result="";
+            if ( document.form1.outputType.selectedIndex == 0 ) {
+                var enc = base16_encode( text );
+                var col=256;
+                if ( document.form1.folding.checked ) {
+                    switch ( type ) {
+                        case "SHA-1":
+                            col = 256;
+                            break;
+                        case "SHA-224":
+                            col = 256;
+                            break;
+                        case "SHA-256":
+                            col = enc.length/2;
+                            break;
+                        case "SHA-384":
+                            col = enc.length/2;
+                            break;
+                        case "SHA-512":
+                            col = enc.length/4;
+                            break;
+                    }
+                }
+                result = stringBreak( enc, col );
+            } else if ( document.form1.outputType.selectedIndex == 1 ) {
+                if ( document.form1.folding.checked ) {
+                    result = stringBreak( base64_encode( text ), 48 );
+                } else {
+                    result = base64_encode( text );
+                }
+            }
+            document.form1.output.value = result;
+	}
+	function resetText() {
+            var i =document.form1.sampleText.selectedIndex;
+            if ( i == 1 ) {
+                document.form1.input.value = defaultText;
+                document.form1.encodeType.selectedIndex=0;
+                // document.form1.sampleText.selectedIndex=0;
+                digest();
+            } else if ( i == 2 ) {
+                document.form1.input.value = stringBreak(defaultTextBase64,48);
+                document.form1.encodeType.selectedIndex=1;
+                // document.form1.sampleText.selectedIndex=0;
+                digest();
+            } else {
+                document.form1.input.value = "";
+                document.form1.output.value = "";
+            }
+	}
+	function initialize() {
+	    if (document.form1.input.value == "" ) {
+		resetText();
+	    }
+	}
+    </script>
+    </head>
+    <body onLoad="initialize()">
+    <h1>A JavaScript Implementation of SHA - DEMO</h1>
+    <ul>
+	<li>Supports UTF-8 character encoding</li>
+    </ul>
+    <form name="form1" >
+        <!--
+	<b>Instruction</b>
+	<blockquote>
+	</blockquote>
+        -->
+	<b>Input</b><br>
+	<blockquote>
+        <select name="sampleText" onchange="resetText();">
+            <option value="sample">Sample Text</option>
+            <option value="text">Text Message</option>
+            <option value="base64">Base64 Message</option>
+        </select>
+	<br>
+	<textarea name="input" style="width:500px; height:100px" onkeyup="digest();"></textarea>
+	<br>
+        <select name="encodeType" onChange="digest();">
+            <option value="utf-8">UTF-8</option>
+            <option value="base64">BASE64</option>
+        </select>
+        <select name="shaType" onChange="digest();">
+            <option value="SHA-1" selected>SHA-1</option>
+            <option value="SHA-224">SHA-224</option>
+            <option value="SHA-256">SHA-256</option>
+            <option value="SHA-384">SHA-384</option>
+            <option value="SHA-512">SHA-512</option>
+        </select>
+	</blockquote>
+	<hr>
+        <b>Output</b>
+        <br>
+	<blockquote>
+        <select name="outputType" onChange="digest();">
+            <option value="base16">Hex String</option>
+            <option value="base64">Base64</option>
+        </select>
+        <input type="checkbox" name="folding" value="on" checked onChange="digest();">Folding</br>
+	<textarea name="output" style="width:500px; height:100px" readonly></textarea>
+	</blockquote>
+    </form>
+	<hr>
+    <b> Contacts </b><br>
+    <blockquote>
+    Ats Oka [ <a href="http://oka.nu/">http://oka.nu/</a> ]
+    </blockquote>
+    <br>
+    <b>Special Thanks to</b><br>
+    <blockquote>
+    Brian Turek [ <a href="http://jssha.sourceforge.net/">http://jssha.sourceforge.net/</a> ]
+    </blockquote>
+    </body>
+</html>

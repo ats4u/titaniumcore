@@ -1,0 +1,97 @@
+
+
+    ./elapse.js
+
+                                                           Titaniumcore Project
+================================================================================
+Atsushi Oka [ http://oka.nu/ ]                                       Jan 11,2009
+
+./elapse.js is a simple profiling tool that will help you to measure
+performance of JavaScript application.
+
+Linking
+    ./elapse.js requires ./trace.js
+
+        <script src="./tools/trace.js"></script>
+        <script src="./tools/elapse.js"></script>
+
+Examples
+
+    1.
+        var et = ElapsedTime.create( "test1" );
+        et.start();
+        for ( var i=0;i<100;i++ ) {
+            proc();
+        }
+        et.stop();
+
+        // Prints the elapsed time.
+        et.print(); 
+
+
+    2.
+        var et = ElapsedTime.create( "test1" );
+        for ( var ii=0;ii<100;ii++ ) {
+            et.start();
+            for ( var i=0;i<100;i++ ) {
+                proc();
+            }
+            et.stop();
+        }
+
+        // Prints total time, executed count and average time.
+        ElapsedTime.display();
+
+
+    3.
+        var et1 = ElapsedTime.create( "test1" );
+        var et2 = ElapsedTime.create( "test2" );
+        for ( var ii=0;ii<100;ii++ ) {
+            for ( var i=0;i<100;i++ ) {
+                et1.start();
+                proc1();
+                et1.stop();
+                et2.start();
+                proc2();
+                et2.stop();
+            }
+        }
+
+        // Print two statistics.
+        ElapsedTime.display();
+
+
+Reference
+
+    ElapsedTime.create( name )
+        Factory method that returns ElapsedTime object.
+
+    ElapsedTime.prototype.start = function( name )
+        Start timing.
+
+    ElapsedTime.prototype.stop = function()
+        Stop timing.
+
+    ElapsedTime.prototype.print = function()
+        Print the time. ( Requires trace.js. )
+
+    ElapsedTime.prototype.get = function()
+        Returns the time in milliseconds.
+
+    ElapsedTime.prototype.name = function()
+        Returns name of this object.
+
+
+    ElapsedTime.display( name )
+        Print the specified profiled time. 
+        Print all profiled times when name parameter is omitted.
+        (Requires trace.js.)
+
+
+
+--- Author ---
+====================================================================================
+
+Copyright(c) 2009 Atsushi Oka [ http://oka.nu/ ]
+This script file is distributed under the LGPL
+
