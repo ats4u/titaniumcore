@@ -14,8 +14,7 @@ is formerly published as "Titaniumcore.js" at the website http://ats.oka.nu/
 since Jan 23,2009.
 
 Titaniumcore contains a number of known bugs which have not been fixed yet, so
-you have to please take great care when you apply this library to your
-application.
+please take great care when you apply this library to your application.
 
 
 
@@ -45,11 +44,11 @@ usually consumes large CPU time. Especially, in 2008, common browsers were not
 so powerful as modern browsers in 2013. This is the reason I have invented an
 asynchronous processing framework in JavaScript.
 
-Since I published it to my website, a number of applications use Titaniumcore.
-I did not expect such many people use my library. Indeed, it was so exciting
-for me but this library was merely written to implement simple and small
-applicatons not for any enterprise-like large systems which may refer a number
-of libraries at same time.
+Since I published it to my website, a number of applications adopt
+Titaniumcore.  I did not expect such many people use my library. Indeed, it was
+so exciting for me but this library was merely written to implement simple and
+small applicatons not for any enterprise-like large systems which may refer
+a number of libraries at same time.
 
 When you apply Titaniumcore.js in a larger project, I think the most serious
 problem which the library causes is function name conflict which is caused by
@@ -78,6 +77,9 @@ TODO
   are written in using common library such as JCA, etc.  (Now Titaniumcore only
   supports an RSA padding scheme which I have invented by myself. This is
   surely, extremely, annoying for users. )
+- Rewrite READMEs.
+- Integrate many great updates by Titaniumcore users in GitHub.
+- Create a discussion group on somewhere like Google's.
 
 
 
