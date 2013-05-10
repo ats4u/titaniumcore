@@ -26,11 +26,9 @@ Please let me explain the background of writing Titaniumcore.
 
 I wrote this library in 2008 as a challenge. 
 
-I am from Japan. 
-
-I have graduated neither high school nor university. I moved to Thailand in the
-middle of 2005. Since then I have been trying to educate myself with cheap
-living cost in Thailand.
+I have graduated neither high school nor university. Since I moved to Thailand
+from Japan in the middle of 2005, I have been trying to educate myself with
+cheap living cost in Thailand.
 
 In late 2008, I was learning about cryptographic algorithm and related topics.
 After I finished reading the Bruce Schneier's _Applied Cryptography_, I thought
@@ -78,8 +76,8 @@ TODO
 - Adapt it to modern import mechanism such as CommonJS.
 - Support standard RSA padding schemes to communicate server-applications which
   are written in using common library such as JCA, etc.  (Now Titaniumcore only
-  supports an RSA padding scheme which I invent by myself. This is surely
-  extremely annoying for users. )
+  supports an RSA padding scheme which I have invented by myself. This is
+  surely, extremely, annoying for users. )
 
 
 
