@@ -106,7 +106,7 @@ LGPLv3
 CONTACT
 --------
 Author :  Atsushi Oka (I am from Japan)  
-Website : http://ats.oka.nu/  https://github.com/ats4u  
+Website : https://github.com/ats4u  
 mailto : ats.creativity@gmail.com  
 Licence : LGPLv3  
 Modified Date May 11,2013  
