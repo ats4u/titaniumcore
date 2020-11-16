@@ -3,7 +3,7 @@ Titaniumcore Javascript Cryptography Toolkit
 ============================================
 
 Author :  Atsushi Oka (I am from Japan)  
-Website : http://ats.oka.nu/  https://github.com/ats4u  
+Website : https://github.com/ats4u  
 
 PREFACE
 -------
