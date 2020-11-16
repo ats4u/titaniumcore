@@ -5,7 +5,7 @@ Titaniumcore Javascript Cryptography Toolkit
 Author :  Atsushi Oka (I am from Japan)  
 Website : http://ats.oka.nu/  https://github.com/ats4u  
 
-PREFARE
+PREFACE
 -------
 
 Titaniumcore is a Javascript Cryptography Toolkit which supports asynchronous
